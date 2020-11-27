@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="Tile-Set.tsx"/>
+ <layer id="1" name="Capa de patrones 1" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzjZmBg4B7Fo3gUj+IhgAFWmgzl
+  </data>
+ </layer>
+</map>
