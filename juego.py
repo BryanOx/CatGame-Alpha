@@ -4,6 +4,9 @@ from pygame.locals import *
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from pytmx.util_pygame import load_pygame
+from tkinter import Tk
+from tkinter import messagebox
 
 ############################################################################################################
 
@@ -52,7 +55,12 @@ class Juego(object):
         FUNCION CONSTRUCTORA DEL JUEGO, CREA LOS OBJETOS
         Y ESTADOS NECESARIOS PARA QUE EL JUEGO FUNCIONE
         """
+        root = Tk()
+        root.wm_withdraw() #to hide the main window
         self.lugar = "habitacion"
+
+        self.cuarto = load_pygame("assets/mapas/Cuarto.tmx")
+        self.world_offset = [0,0]
 
         self.seleccion = 1
         
@@ -63,6 +71,8 @@ class Juego(object):
         self.menuAyuda = False
 
         self.menuLoc = False
+
+        self.salirJuego = False
         
         self.score = 0
         self.fuente = pygame.font.Font(None, 24)
@@ -126,6 +136,13 @@ class Juego(object):
         FUNCION PARA PROCESAR LOS EVENTOS DEL TECLADO/MOUSE/JOYSTICK
         Y CUMPLIR FUNCIONES DETERMINADAS PARA LAS TECLAS
         """
+        if self.salirJuego:
+            salir = messagebox.askquestion('Salir del juego.','¿Seguro que quieres salir del juego?\nAsegurate de haber guardado la partida antes para no perder progreso.')
+            if salir == 'yes':
+                return True
+            else:
+                self.salirJuego = False
+
         if self.menuLoc:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -169,7 +186,7 @@ class Juego(object):
                     return True
                 if event.type == KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        return True
+                        self.salirJuego = True
                     if event.key == pygame.K_h:
                         self.menuPausa = False
                         self.menuAyuda = True
@@ -260,7 +277,6 @@ class Juego(object):
             self.session.commit()
         else:
             SaveG = self.session.query(JugadorDB).get(self.gato.nombre)
-            print(SaveG)
             SaveG.estado = self.gato.estado
             SaveG.posX = self.gato.rect.x
             SaveG.posY = self.gato.rect.y
@@ -272,7 +288,8 @@ class Juego(object):
             SaveG.intestinos = self.gato.intestinos
             SaveG.dinero = self.gato.dinero
             SaveG.lugar = self.lugar
-            self.session.commit()            
+            self.session.commit()
+        messagebox.showinfo('Guardar partida.','La partida ha sido guardada con exito.')
 
 ############################################################################################################
 
@@ -291,6 +308,7 @@ class Juego(object):
         self.lugar = SaveG.lugar
         self.session.commit()
         self.menuPausa = False
+        messagebox.showinfo('Cargar partida.','La partida ha sido cargada con exito.')
 
 ############################################################################################################
 
@@ -425,8 +443,10 @@ class Juego(object):
             self.lista_comedero.draw(pantalla)
             self.lista_cama.draw(pantalla)
             self.lista_arenero.draw(pantalla)
+            
+        self.lista_sprites.draw(pantalla)
 
-        elif self.lugar == "despensa":
+        if self.lugar == "despensa":
             self.lista_raton.draw(pantalla)
             
             self.scoreIco = pygame.image.load("assets/ico/score.png").convert_alpha()
@@ -435,8 +455,6 @@ class Juego(object):
             m_score = self.fuente.render(str(self.score), True, BLANCO)
             m_score_rect = m_score.get_rect(center = (840, 50))
             pantalla.blit(m_score, m_score_rect)
-
-        self.lista_sprites.draw(pantalla)
 
         self.monedaIco = pygame.image.load("assets/ico/moneda.png").convert_alpha()
         pantalla.blit(self.monedaIco, (810, 10))
