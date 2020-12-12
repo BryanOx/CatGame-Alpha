@@ -59,9 +59,6 @@ class Juego(object):
         root.wm_withdraw() #to hide the main window
         self.lugar = "habitacion"
 
-        self.cuarto = load_pygame("assets/mapas/Cuarto.tmx")
-        self.world_offset = [0,0]
-
         self.seleccion = 1
         
         self.gameOver = False
