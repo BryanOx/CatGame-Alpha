@@ -242,16 +242,7 @@ class Juego(object):
                             self.meow.play()
                             
         return False
-
-############################################################################################################
-
-    def spawnRaton(self):
-        """
-        FUNCION PARA SPAWNEAR UN RATON
-        """
-        self.lista_raton.add(self.raton)
-        self.raton.recolocar()
-
+        
 ############################################################################################################
 
     def guardar_partida(self):
