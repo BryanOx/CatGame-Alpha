@@ -4,7 +4,7 @@ from pygame.locals import *
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from pytmx.util_pygame import load_pygame
+#from pytmx.util_pygame import load_pygame
 from tkinter import Tk
 from tkinter import messagebox
 
