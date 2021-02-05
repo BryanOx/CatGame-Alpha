@@ -4,7 +4,6 @@ from pygame.locals import *
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from pytmx.util_pygame import load_pygame
 from tkinter import Tk
 from tkinter import messagebox
 
@@ -350,7 +349,7 @@ class Juego(object):
                 if len(self.raton_golpe_lista) == 1:
                     self.ronroneo.play()
                     self.score += 1
-                    self.raton_golpe_lista.pop
+                    self.raton_golpe_lista.pop()
                     self.squeak.play()
                     self.raton.recolocar()
                     self.lista_raton.add(self.raton)
@@ -366,7 +365,7 @@ class Juego(object):
                     self.lista_utilidades.add(self.camaGato)
                     self.lista_utilidades.add(self.arenero)
                     if len(self.lista_raton) > 0:
-                        self.lista_raton.pop
+                        self.lista_raton.pop()
 
                 except:
                     pass
@@ -469,8 +468,8 @@ class Juego(object):
         contenedorSed = pygame.draw.rect(pantalla, GRISOSC, (13, 53, 106, 10))
         barraSed = pygame.draw.rect(pantalla, AZUL, (16, 56, self.gato.sed, 4))
 
-        contenedorEnergia = pygame.draw.rect(pantalla, GRISOSC, (13, 73, 106, 10))
-        barraEnergia = pygame.draw.rect(pantalla, DORADO, (16, 76, self.gato.energia, 4))
+        pygame.draw.rect(pantalla, GRISOSC, (13, 73, 106, 10))
+        pygame.draw.rect(pantalla, DORADO, (16, 76, self.gato.energia, 4))
 
         #-----------------------------------------------------------
 
