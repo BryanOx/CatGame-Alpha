@@ -4,6 +4,7 @@ from pygame.locals import *
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
 from tkinter import Tk
 from tkinter import messagebox
 
@@ -54,8 +55,6 @@ class Juego(object):
         FUNCION CONSTRUCTORA DEL JUEGO, CREA LOS OBJETOS
         Y ESTADOS NECESARIOS PARA QUE EL JUEGO FUNCIONE
         """
-        root = Tk()
-        root.wm_withdraw() #to hide the main window
         self.lugar = "habitacion"
 
         self.seleccion = 1
@@ -133,10 +132,14 @@ class Juego(object):
         Y CUMPLIR FUNCIONES DETERMINADAS PARA LAS TECLAS
         """
         if self.salirJuego:
+            root = Tk()
+            root.wm_withdraw() #to hide the main window
             salir = messagebox.askquestion('Salir del juego.','¿Seguro que quieres salir del juego?\nAsegurate de haber guardado la partida antes para no perder progreso.')
             if salir == 'yes':
+                root.destroy()
                 return True
             else:
+                root.destroy()
                 self.salirJuego = False
 
         if self.menuLoc:
@@ -254,6 +257,8 @@ class Juego(object):
 ############################################################################################################
 
     def guardar_partida(self):
+        root = Tk()
+        root.wm_withdraw() #to hide the main window
         if (self.session.query(JugadorDB).get(self.gato.nombre)==None):
             jugador = JugadorDB(
                 nombre = self.gato.nombre,
@@ -286,10 +291,13 @@ class Juego(object):
             SaveG.lugar = self.lugar
             self.session.commit()
         messagebox.showinfo('Guardar partida.','La partida ha sido guardada con exito.')
+        root.destroy()
 
 ############################################################################################################
 
     def cargar_partida(self):
+        root = Tk()
+        root.wm_withdraw() #to hide the main window
         SaveG = self.session.query(JugadorDB).get(self.gato.nombre)
         self.gato.estado = SaveG.estado
         self.gato.rect.x = SaveG.posX
@@ -305,6 +313,7 @@ class Juego(object):
         self.session.commit()
         self.menuPausa = False
         messagebox.showinfo('Cargar partida.','La partida ha sido cargada con exito.')
+        root.destroy()
 
 ############################################################################################################
 
@@ -351,9 +360,9 @@ class Juego(object):
                     self.score += 1
                     self.raton_golpe_lista.pop()
                     self.squeak.play()
-                    self.raton.recolocar()
-                    self.lista_raton.add(self.raton)
+                    self.spawnRaton()
                     self.gato.hambre += 5
+                    print(len(self.lista_raton))
             #-------------------------------------------
             
             #-------------------------------------------
